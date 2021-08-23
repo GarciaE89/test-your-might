@@ -28,7 +28,7 @@ function startQuiz() {
   timerEl.textContent = time;
 
   getQuestion();
-}
+};
 // this function will to get questions
 function getQuestion() {
   
@@ -56,7 +56,7 @@ function getQuestion() {
     
     optionsEl.appendChild(choiceBtn);
   });
-}
+};
 
 function questionClick() {
   
@@ -95,5 +95,70 @@ function questionClick() {
   } else {
     getQuestion();
   }
-}
+};
+function quizEnd() {
+  
+    clearInterval(timerId);
+  
+    
+    var endScreenEl = document.getElementById("end-screen");
+    endScreenEl.removeAttribute("class");
+  
+    
+    var finalScoreEl = document.getElementById("final-score");
+    finalScoreEl.textContent = time;
+  
+    
+    questionsEl.setAttribute("class", "hide");
+  };
+  
+  function clockTick() {
+    
+    time--;
+    timerEl.textContent = time;
+  
+    
+    if (time <= 0) {
+      quizEnd();
+    }
+  };
+  
+  function saveHighscore() {
+    
+    var initials = initialsEl.value.trim();
+  
+    if (initials !== "") {
+      
+      var highscores =
+        JSON.parse(window.localStorage.getItem("highscores")) || [];
+  
+      
+      var newScore = {
+        score: time,
+        initials: initials
+      };
+  
+      
+      highscores.push(newScore);
+      window.localStorage.setItem("highscores", JSON.stringify(highscores));
+  
+      
+      window.location.href = "high-scores.html";
+    }
+  };
+  
+  function checkForEnter(event) {
+    
+    if (event.key === "Enter") {
+      saveHighscore();
+    }
+  };
+  
+  
+  submitBtn.onclick = saveHighscore;
+  
+  
+  startBtn.onclick = startQuiz;
+  
+  initialsEl.onkeyup = checkForEnter;
 
